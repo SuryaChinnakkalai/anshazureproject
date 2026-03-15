@@ -1,0 +1,9 @@
+{
+	"name": "df-anshazureproject2",
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d611b44a-5182-4db5-b4a8-c654d6e10e0b",
+		"tenantId": "df191cdf-c36a-4baf-a7ed-4c4784500b1c"
+	}
+}
