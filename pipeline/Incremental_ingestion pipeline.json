@@ -13,7 +13,7 @@
 						]
 					},
 					{
-						"activity": "current",
+						"activity": "current_cdc",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -114,7 +114,7 @@
 				}
 			},
 			{
-				"name": "current",
+				"name": "current_cdc",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
