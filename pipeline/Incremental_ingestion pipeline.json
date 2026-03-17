@@ -13,7 +13,7 @@
 						]
 					},
 					{
-						"activity": "current_cdc",
+						"activity": "current",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -70,7 +70,7 @@
 							"container": "bronze",
 							"folder": "Users",
 							"file": {
-								"value": "[@concat(pipeline().parameters.table,'_',variables('current'))]\n",
+								"value": "@concat(pipeline().parameters.table,'_',variables('current'))\n",
 								"type": "Expression"
 							}
 						}
@@ -114,7 +114,7 @@
 				}
 			},
 			{
-				"name": "current_cdc",
+				"name": "current",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
