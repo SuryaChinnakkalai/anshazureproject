@@ -7,7 +7,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Last_cdc",
+						"activity": "last_cdc",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -31,7 +31,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from @ {pipeline().parameters.schema}.@ {pipeline().parameters.table} Where @{pipeline().parameters.cdc_column}  \n'@{activity('Last_cdc').output.value[0].cdc}'\n",
+							"value": "select * from @ {pipeline().parameters.schema}.@ {pipeline().parameters.table} Where @{pipeline().parameters.cdc_column}  \n'@{activity('last_cdc').output.value[0].cdc}'\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -78,10 +78,8 @@
 				]
 			},
 			{
-				"name": "Last_cdc",
+				"name": "last_cdc",
 				"type": "Lookup",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -118,8 +116,6 @@
 			{
 				"name": "current_cdc",
 				"type": "SetVariable",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureOutput": false,
@@ -206,8 +202,6 @@
 			{
 				"name": "max_cdc",
 				"type": "Script",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "azuresql toDatalake",
