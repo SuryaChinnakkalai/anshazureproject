@@ -31,7 +31,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from [@{pipeline().parameters.schema}].[@{pipeline().parameters.table}] \nwhere @{pipeline().parameters.cdc_column} > '@{activity('Last_cdc').output.value[0].cdc}'",
+							"value": "select * from [@{pipeline().parameters.schema}].[@{pipeline().parameters.table}] \nwhere [@{pipeline().parameters.cdc_column}] > '@{activity('Last_cdc').output.firstRow.cdc}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -80,6 +80,8 @@
 			{
 				"name": "Last_cdc",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -116,6 +118,8 @@
 			{
 				"name": "current_cdc",
 				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureOutput": false,
@@ -133,6 +137,8 @@
 			{
 				"name": "update_last_cdc",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -156,6 +162,7 @@
 						],
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -199,6 +206,8 @@
 			{
 				"name": "max_cdc",
 				"type": "Script",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "azuresql toDatalake",
