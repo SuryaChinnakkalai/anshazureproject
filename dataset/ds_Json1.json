@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "manish040596/adf_projects/refs/heads/main/orders.json"
+				"relativeUrl": "SuryaChinnakkalai/anshazureproject/refs/heads/main/orders.json"
 			}
 		},
 		"schema": {}
