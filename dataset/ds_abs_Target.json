@@ -1,0 +1,49 @@
+{
+	"name": "ds_abs_Target",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_abs_scd2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "scd_type_2_tgt.csv",
+				"folderPath": "Output_scd2_abs",
+				"container": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "user_id",
+				"type": "String"
+			},
+			{
+				"name": "subscription ",
+				"type": "String"
+			},
+			{
+				"name": "price",
+				"type": "String"
+			},
+			{
+				"name": "location ",
+				"type": "String"
+			},
+			{
+				"name": "pincode",
+				"type": "String"
+			},
+			{
+				"name": "isactive",
+				"type": "String"
+			}
+		]
+	}
+}

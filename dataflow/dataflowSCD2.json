@@ -1,0 +1,113 @@
+{
+	"name": "dataflowSCD2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_Azureblobstorage_scd2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_abs_scd2_target",
+						"type": "DatasetReference"
+					},
+					"name": "target"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_abs_Target",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "sourcehash"
+				},
+				{
+					"name": "targethash"
+				},
+				{
+					"name": "exists1"
+				},
+				{
+					"name": "IsActive"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "exists2"
+				},
+				{
+					"name": "exists3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          user_id as string,",
+				"          {subscription } as string,",
+				"          price as string,",
+				"          {location } as string,",
+				"          pincode as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          user_id as string,",
+				"          {subscription } as string,",
+				"          price as string,",
+				"          {location } as string,",
+				"          pincode as string,",
+				"          isactive as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> target",
+				"source1 derive(hash = md5(user_id,{subscription },price,{location },pincode)) ~> sourcehash",
+				"target derive(hash = md5(user_id,{subscription },price,{location },pincode)) ~> targethash",
+				"sourcehash, targethash exists(sourcehash@hash == targethash@hash,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1 derive(is_active = 1) ~> IsActive",
+				"IsActive select(mapColumn(",
+				"          user_id,",
+				"          {subscription },",
+				"          price,",
+				"          {location },",
+				"          pincode,",
+				"          is_active",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"targethash, sourcehash exists(ERROR_FUNCTION('') == ERROR_FUNCTION(''),",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists2",
+				"exists2, sourcehash exists(targethash@hash == sourcehash@hash,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> exists3",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          user_id as string,",
+				"          {subscription } as string,",
+				"          price as string,",
+				"          {location } as string,",
+				"          pincode as string,",
+				"          isactive as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
